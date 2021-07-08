@@ -1,0 +1,33 @@
+Предварительно настраиваем хост с которого будет работать gcloud.
+
+в веб консоли google cloud: 
+- в настройках проекта выбираем service Accounts, учетную запсиь 804972905766-compute@developer.gservice
+ и в её настройках получаем ключ.ключ переименовываем в key.json. и импортируем его на машину,с которой будет работать terraform
+- верхний правый угол- активировать  Голубая полоска изображение >_ 
+Активируем gcloud
+-В настройках инстансов при создании или уже после в параметре или  выбираем 
+Cloud API access scopes параметр Allow full access to all Cloud APIs. Это надо для проверки иначе не пройдет.
+
+
+На пк, с которого будет работать терраформ:
+-Устанавливаем пользователя от имени которого будет работа с утилитой gcloud
+gcloud config set 804972905766-compute@developer.gserviceaccount.com
+- Выполняем команду gcloud auth activate-service-account --key-file=key.json
+- запускаем gcloud init и настраиваем его для пользователя   804972905766-compute@developer.gservice
+
+- проверка 
+oot@zb1:~/terraform1# gcloud compute instances list
+NAME  ZONE           MACHINE_TYPE  PREEMPTIBLE  INTERNAL_IP  EXTERNAL_IP      STATUS
+zb1   us-central1-a  e2-medium                  10.128.0.10  104.154.187.155  RUNNING
+zb2   us-central1-a  e2-medium                  10.128.0.11                   TERMINATED
+root@zb1:~/terraform1#
+- под рутом создаем ключ ssh-keygen 
+даем права понижающие, чтобы только владелец мог читать RUN chmod 600 /root/.ssh/id_rsa иначе прикладные системы могут отказаться работать с данным ключем  
+Также для организации доступа до хостов необходимого google проекта выполняем команду
+gcloud compute config-ssh
+
+- Далее качаем терраформ с официального сайта. распаковываем и кладем его содержимое в bin.
+для отладки используем команды 
+terraform plan
+terraform apply
+terraform destroy
