@@ -15,7 +15,7 @@ region = "us-central1"
 
 
 resource "google_compute_instance" "default" {
-  name         = "test"
+  name         = "test4"
   machine_type = "e2-medium"
   zone         = "us-central1-a"
 
@@ -27,7 +27,7 @@ resource "google_compute_instance" "default" {
     }
   }
 
-
+ 
 
 network_interface {
     network = "default"
@@ -39,4 +39,8 @@ network_interface {
 
 
 
-}
+  # ...
+
+  provisioner "local-exec" {
+    command = "gcloud compute ssh test4 --zone=us-central1-a --ssh-key-file ~/.ssh/id_rsa  --command=\"apt install nginx -y\""
+  }
